@@ -356,59 +356,5 @@
   </div>
 
   <script src="js/petals.js"></script>
-
-  <!-- YouTube hidden player -->
-  <div id="ytPlayer" style="display:none;"></div>
-
-  <!-- Music control button -->
-  <button id="musicBtn" title="Música" aria-label="Activar música">🎵</button>
-
-  <script>
-    // YouTube IFrame API
-    var ytPlayer;
-    var musicReady = false;
-    var musicPlaying = false;
-
-    function onYouTubeIframeAPIReady() {
-      ytPlayer = new YT.Player('ytPlayer', {
-        videoId: '7SsmyjVF1Oo',
-        playerVars: {
-          autoplay: 0,
-          loop: 1,
-          playlist: '7SsmyjVF1Oo',
-          controls: 0,
-          disablekb: 1,
-          fs: 0,
-          modestbranding: 1,
-          rel: 0
-        },
-        events: {
-          onReady: function(e) {
-            musicReady = true;
-            e.target.setVolume(70);
-          }
-        }
-      });
-    }
-
-    var tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    document.head.appendChild(tag);
-
-    document.getElementById('musicBtn').addEventListener('click', function() {
-      if (!musicReady) return;
-      if (!musicPlaying) {
-        ytPlayer.playVideo();
-        musicPlaying = true;
-        this.textContent = '🔇';
-        this.title = 'Silenciar música';
-      } else {
-        ytPlayer.pauseVideo();
-        musicPlaying = false;
-        this.textContent = '🎵';
-        this.title = 'Activar música';
-      }
-    });
-  </script>
 </body>
 </html>
