@@ -1,0 +1,1907 @@
+/* ============================================
+   CUADERNO DE FLORES AMARILLAS - Para Mi Amor
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@400;700&display=swap');
+/* ============================================
+   BASE
+   ============================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ============================================
+   BOTÓN DE MÚSICA
+   ============================================ */
+.music-btn {
+  position: fixed;
+  bottom: 90px;
+  right: 22px;
+  z-index: 9999;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 220, 80, 0.6);
+  background: rgba(20, 5, 40, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.45), 0 0 12px rgba(255,200,50,0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+.music-btn:hover {
+  transform: scale(1.12);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.5), 0 0 18px rgba(255,220,60,0.45);
+}
+.music-btn .music-icon {
+  font-size: 22px;
+  line-height: 1;
+  position: absolute;
+}
+.music-btn.is-playing .music-icon {
+  opacity: 0;
+}
+.music-bars {
+  display: none;
+  align-items: flex-end;
+  gap: 3px;
+  height: 22px;
+}
+.music-btn.is-playing .music-bars {
+  display: flex;
+}
+.music-bars .bar {
+  width: 4px;
+  background: #fde68a;
+  border-radius: 2px;
+  animation: musicBar 0.8s ease-in-out infinite alternate;
+}
+.music-bars .b1 { height: 8px;  animation-delay: 0s;    }
+.music-bars .b2 { height: 18px; animation-delay: 0.15s; }
+.music-bars .b3 { height: 12px; animation-delay: 0.3s;  }
+.music-bars .b4 { height: 20px; animation-delay: 0.45s; }
+@keyframes musicBar {
+  from { transform: scaleY(0.3); opacity: 0.6; }
+  to   { transform: scaleY(1);   opacity: 1; }
+}
+
+html, body { width: 100%; height: 100%; overflow: hidden; }
+
+body {
+  background: linear-gradient(
+    160deg,
+    #0d0520 0%, #1a0a2e 12%, #2d1052 25%,
+    #4a1060 36%, #7b1f6e 48%, #b84370 58%,
+    #e06840 70%, #f0944d 80%, #f7be6a 90%, #fde68a 100%
+  );
+  background-size: 300% 300%;
+  animation: bgShift 22s ease-in-out infinite alternate;
+  font-family: 'Dancing Script', cursive;
+  position: relative;
+  user-select: none;
+}
+
+@keyframes bgShift {
+  0%   { background-position: 0% 50%; filter: hue-rotate(0deg); }
+  30%  { background-position: 60% 20%; filter: hue-rotate(15deg); }
+  60%  { background-position: 100% 80%; filter: hue-rotate(-10deg); }
+  100% { background-position: 30% 100%; filter: hue-rotate(20deg); }
+}
+
+/* ============================================
+   CANVAS PÉTALOS
+   ============================================ */
+#petalCanvas {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none; z-index: 2;
+}
+
+/* Stars */
+#stars {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 60%;
+  pointer-events: none; z-index: 1;
+}
+.star {
+  position: absolute;
+  border-radius: 50%;
+  animation: twinkle var(--d, 3s) ease-in-out infinite var(--dl, 0s);
+  background: var(--sc, #fff);
+}
+@keyframes twinkle {
+  0%,100% { opacity: 0.08; transform: scale(.6); filter: blur(.5px); }
+  25%     { opacity: .65; transform: scale(1.15); }
+  50%     { opacity: 1;   transform: scale(1.6); filter: blur(0) drop-shadow(0 0 3px rgba(255,240,180,.9)); }
+  75%     { opacity: .5;  transform: scale(1.0); }
+}
+
+/* Título flotante del cielo */
+.sky-title {
+  position: fixed;
+  top: .7rem; left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(.65rem, 2.8vw, 1rem);
+  color: transparent;
+  background: linear-gradient(90deg, #ffd6e7, #ffe87a, #ffc2e2, #fffacd, #ffc2e2, #ffe87a, #ffd6e7);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: titleRainbow 5s linear infinite;
+  text-shadow: none;
+  filter: drop-shadow(0 0 8px rgba(255,200,150,.5));
+  letter-spacing: .04em;
+  z-index: 5;
+  white-space: nowrap;
+  padding: 0 .5rem;
+  max-width: 100vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@keyframes titleRainbow {
+  from { background-position: 0% center; }
+  to   { background-position: 300% center; }
+}
+
+/* Luna */
+body::before {
+  content: '';
+  position: fixed; top: 4%; right: 5%;
+  width: clamp(36px, 8vw, 60px); height: clamp(36px, 8vw, 60px);
+  background: radial-gradient(circle at 38% 38%, #fff9d8, #fde68a);
+  border-radius: 50%;
+  box-shadow: 0 0 28px rgba(255,230,100,.6), 0 0 70px rgba(255,200,50,.25);
+  z-index: 1;
+  animation: moonFloat 9s ease-in-out infinite;
+}
+@keyframes moonFloat {
+  0%,100% { transform: translateY(0);    filter: brightness(1)    drop-shadow(0 0 18px rgba(255,230,100,.5)); }
+  50%     { transform: translateY(-10px); filter: brightness(1.18) drop-shadow(0 0 38px rgba(255,230,100,.85)); }
+}
+
+/* ============================================
+   BOOK SCENE
+   ============================================ */
+.book-scene {
+  position: fixed;
+  top: calc(50% - 2.8rem);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  perspective: 2200px;
+  filter: drop-shadow(0 0 28px rgba(255,150,200,.22)) drop-shadow(0 0 60px rgba(255,200,100,.15));
+  animation: bookGlow 7s ease-in-out infinite;
+}
+
+@keyframes bookGlow {
+  0%,100% { filter: drop-shadow(0 0 22px rgba(255,150,200,.18)) drop-shadow(0 0 50px rgba(255,200,80,.12)); }
+  35%     { filter: drop-shadow(0 0 38px rgba(255,100,180,.32)) drop-shadow(0 0 80px rgba(255,220,100,.22)); }
+  70%     { filter: drop-shadow(0 0 30px rgba(200,100,255,.22)) drop-shadow(0 0 65px rgba(255,180,120,.18)); }
+}
+
+.book {
+  position: relative;
+  width: min(420px, 94vw);
+  /* 100svh = small viewport height (excluye chrome del navegador movil) */
+  height: min(570px, calc(100svh - 9.5rem));
+}
+
+/* ============================================
+   PAGES
+   ============================================ */
+.page {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  transition: transform 1.1s cubic-bezier(.645,.045,.355,1);
+  cursor: pointer;
+}
+
+/* Face common */
+.face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 4px 12px 12px 4px;
+  overflow: hidden;
+}
+
+/* Back face */
+.face.back {
+  transform: rotateY(180deg);
+  border-radius: 12px 4px 4px 12px;
+}
+
+/* Flip state */
+.page.flipped {
+  transform: rotateY(-180deg);
+}
+
+/* Z-index controlled via JS */
+
+/* ============================================
+   PAGE VISUAL BASE
+   ============================================ */
+.face.front {
+  background: linear-gradient(135deg, #fdf8e8 0%, #fef9ec 40%, #fdf3d8 100%);
+  box-shadow:
+    inset -4px 0 12px rgba(0,0,0,.07),
+    4px 4px 30px rgba(0,0,0,.32),
+    -2px 2px 8px rgba(0,0,0,.12);
+}
+
+/* Per-chapter tinted backgrounds */
+.face.front.pg-ch1 {
+  background: linear-gradient(
+    135deg,
+    #fff0f5 0%, #fff5f0 30%, #fdf3d8 70%, #fef0e4 100%
+  );
+}
+.face.front.pg-ch2 {
+  background: linear-gradient(
+    135deg,
+    #fffbec 0%, #fef9df 30%, #fdf3c0 70%, #fefbe8 100%
+  );
+}
+.face.front.pg-ch3 {
+  background: linear-gradient(
+    135deg,
+    #f5f0ff 0%, #faf0ff 30%, #fdf3e8 70%, #fef8f8 100%
+  );
+}
+
+/* Colored ruled lines per chapter */
+.pg-ch1 .page-lines { background-image: repeating-linear-gradient(transparent, transparent 31px, rgba(255,160,160,.18) 31px, rgba(255,160,160,.18) 32px); }
+.pg-ch2 .page-lines { background-image: repeating-linear-gradient(transparent, transparent 31px, rgba(200,155,40,.22) 31px, rgba(200,155,40,.22) 32px); }
+.pg-ch3 .page-lines { background-image: repeating-linear-gradient(transparent, transparent 31px, rgba(160,100,220,.14) 31px, rgba(160,100,220,.14) 32px); }
+
+/* Ruled lines */
+.page-lines {
+  position: absolute;
+  inset: 80px 48px 48px 48px;
+  background-image: repeating-linear-gradient(
+    transparent, transparent 31px,
+    rgba(180,160,100,.2) 31px, rgba(180,160,100,.2) 32px
+  );
+  pointer-events: none;
+}
+
+/* Page back decoration */
+.page-back {
+  background: linear-gradient(135deg, #fce4ec, #fdf3d8, #f3e5f5);
+}
+.back-pattern {
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(255,100,150,.1) 2px, transparent 2px),
+    radial-gradient(circle, rgba(246,192,38,.1) 2px, transparent 2px);
+  background-size: 22px 22px, 33px 33px;
+  background-position: 0 0, 11px 11px;
+}
+
+/* ============================================
+   SPIRAL RINGS
+   ============================================ */
+.spiral-row {
+  position: absolute;
+  top: 0; left: 0;
+  width: 36px; height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 12px 0;
+  background: linear-gradient(180deg, #c8a456, #a07830, #c8a456);
+  border-radius: 4px 0 0 4px;
+  z-index: 3;
+}
+
+.ring {
+  display: block;
+  width: 22px; height: 22px;
+  border: 3.5px solid #7a5a20;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%,
+    #f0c860, #c89030, #7a5020);
+  box-shadow: 0 1px 3px rgba(0,0,0,.4),
+    inset 0 1px 2px rgba(255,220,80,.3);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.ring::after {
+  content: '';
+  position: absolute;
+  bottom: -18px; left: 50%;
+  transform: translateX(-50%);
+  width: 3px; height: 16px;
+  background: rgba(120,80,20,.35);
+}
+
+/* ============================================
+   PORTADA
+   ============================================ */
+.cover-page {
+  background: linear-gradient(
+    155deg,
+    #fff0f8 0%, #ffd6eb 15%, #ffb8d4 28%,
+    #ffd97a 45%, #f6c026 60%,
+    #e8a510 78%, #c87800 100%
+  ) !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .25rem;
+  padding: .5rem 1rem .5rem 48px;
+  overflow: hidden;
+}
+
+.cover-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(1.5rem, 6vw, 2.4rem);
+  color: transparent;
+  background: linear-gradient(135deg, #5c1800, #a03400, #7a2000, #3a1000);
+  -webkit-background-clip: text; background-clip: text;
+  text-align: center;
+  line-height: 1.2;
+  text-shadow: none;
+  filter: drop-shadow(0 3px 10px rgba(255,100,0,.28));
+  margin-top: .5rem;
+  animation: fadeUp 1.4s ease both;
+}
+
+.cover-sub {
+  font-size: clamp(.8rem, 2.2vw, 1rem);
+  color: rgba(60,20,0,.7);
+  text-align: center;
+  line-height: 1.6;
+  margin-top: .6rem;
+  animation: fadeUp 1.6s ease both;
+}
+
+.cover-date {
+  font-family: 'Playfair Display', serif;
+  font-size: .82rem;
+  color: rgba(60,20,0,.55);
+  letter-spacing: .12em;
+  margin-top: .8rem;
+  animation: fadeUp 1.8s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Pista de pasar página */
+.page-hint {
+  position: absolute;
+  bottom: 1.2rem; right: 1.4rem;
+  font-size: .78rem;
+  color: rgba(60,20,0,.5);
+  display: flex; align-items: center; gap: .3rem;
+  animation: hintPulse 2.5s ease-in-out infinite;
+}
+
+.hint-arrow {
+  font-size: 1.2rem;
+  color: #7a3000;
+}
+
+@keyframes hintPulse {
+  0%,100% { opacity: .4; transform: translateX(0); }
+  50%      { opacity: .9; transform: translateX(4px); }
+}
+
+/* ============================================
+   GIRASOL PORTADA
+   ============================================ */
+.cover-sunflower {
+  font-size: clamp(4.2rem, 18vw, 6.5rem);
+  line-height: 1;
+  margin: .2rem 0 .3rem;
+  display: block;
+  text-align: center;
+  cursor: pointer;
+  animation: sfSpin 18s linear infinite, fadeUp .9s ease both;
+  filter: drop-shadow(0 6px 18px rgba(255,190,0,.55));
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1),
+              filter .25s ease;
+  user-select: none;
+}
+.cover-sunflower:hover {
+  filter: drop-shadow(0 8px 28px rgba(255,200,0,.8)) brightness(1.08);
+}
+@keyframes sfSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ============================================
+   INTERIOR PAGES - HEADER
+   ============================================ */
+.page-header {
+  position: absolute;
+  top: 0; left: 36px; right: 0;
+  height: 72px;
+  display: flex; align-items: center;
+  padding: 0 1rem 0 1.2rem;
+  border-bottom: 1.5px solid rgba(200,160,60,.3);
+  background: linear-gradient(180deg, rgba(255,240,160,.3), transparent);
+}
+
+/* colored header accent per chapter */
+.pg-ch1 .page-header { background: linear-gradient(180deg, rgba(255,200,220,.32), transparent); border-bottom-color: rgba(255,150,180,.3); }
+.pg-ch2 .page-header { background: linear-gradient(180deg, rgba(255,240,150,.35), transparent); border-bottom-color: rgba(246,192,38,.35); }
+.pg-ch3 .page-header { background: linear-gradient(180deg, rgba(210,180,255,.32), transparent); border-bottom-color: rgba(180,120,255,.28); }
+
+.header-flowers {
+  display: flex; gap: 6px; align-items: center;
+  flex: 1;
+}
+
+.hf {
+  position: relative;
+  width: 24px; height: 24px;
+}
+
+.hf::before {
+  content: '✿';
+  font-size: 1.2rem;
+  color: #f6c026;
+  text-shadow: 0 0 6px rgba(246,194,38,.5);
+  animation: flowerWiggle var(--w, 3s) ease-in-out infinite;
+}
+
+.hf1 { --w: 3.2s; }
+.hf2 { --w: 2.8s; animation-delay: .4s; }
+.hf3 { --w: 3.6s; animation-delay: .8s; }
+
+.hf1::before { color: #f6c026; }
+.hf2::before { color: #ffe066; font-size: 1.5rem; }
+.hf3::before { color: #e8a500; }
+
+@keyframes flowerWiggle {
+  0%   { transform: rotate(-10deg) scale(1);    filter: brightness(1); }
+  20%  { transform: rotate(13deg)  scale(1.28); filter: brightness(1.25) drop-shadow(0 0 5px rgba(255,220,0,.65)); }
+  45%  { transform: rotate(-7deg)  scale(1.05); filter: brightness(1.05); }
+  70%  { transform: rotate(11deg)  scale(1.2);  filter: brightness(1.18) drop-shadow(0 0 4px rgba(255,200,0,.5)); }
+  100% { transform: rotate(-10deg) scale(1);    filter: brightness(1); }
+}
+
+.page-chapter {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: .8rem;
+  color: rgba(120,80,20,.6);
+  letter-spacing: .08em;
+}
+
+/* ============================================
+   INTERIOR PAGES - CONTENT
+   ============================================ */
+.page-content {
+  position: absolute;
+  top: 72px; bottom: 40px;
+  left: 52px; right: 14px;
+  padding: .8rem .6rem;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+  z-index: 1;
+}
+
+.page-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(1rem, 3vw, 1.35rem);
+  color: #7a3800;
+  text-shadow: 0 1px 4px rgba(200,100,0,.2);
+  border-bottom: 1px dashed rgba(200,150,50,.4);
+  padding-bottom: .3rem;
+  margin-bottom: .2rem;
+  position: relative;
+}
+
+/* Per-chapter title colors + gradient shimmer */
+.pg-ch1 .page-title {
+  color: transparent;
+  background: linear-gradient(90deg, #c0404a, #e8628a, #c44060);
+  -webkit-background-clip: text; background-clip: text;
+  border-bottom-color: rgba(220,100,130,.4);
+  text-shadow: none;
+  filter: drop-shadow(0 1px 3px rgba(200,80,100,.25));
+}
+.pg-ch2 .page-title {
+  color: transparent;
+  background: linear-gradient(90deg, #8b5c00, #d4900a, #c07800);
+  -webkit-background-clip: text; background-clip: text;
+  border-bottom-color: rgba(200,150,40,.4);
+  text-shadow: none;
+  filter: drop-shadow(0 1px 3px rgba(180,120,0,.25));
+}
+.pg-ch3 .page-title {
+  color: transparent;
+  background: linear-gradient(90deg, #6b3cad, #9b5ddd, #7a42bc);
+  -webkit-background-clip: text; background-clip: text;
+  border-bottom-color: rgba(160,100,220,.3);
+  text-shadow: none;
+  filter: drop-shadow(0 1px 3px rgba(120,60,200,.2));
+}
+
+.page-text {
+  font-size: clamp(.78rem, 2vw, .92rem);
+  color: #3a2000;
+  line-height: 2.0;
+  font-family: 'Dancing Script', cursive;
+  text-indent: 1em;
+}
+
+/* Flower deco in page */
+.page-deco-flower {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-start;
+  opacity: .7;
+  animation: sway1 4s ease-in-out infinite;
+}
+
+.page-deco-flower.right {
+  justify-content: flex-end;
+}
+
+.deco-bloom {
+  position: relative;
+  width: 42px; height: 42px;
+}
+
+.deco-bloom.large {
+  width: 56px; height: 56px;
+}
+
+.dp {
+  position: absolute;
+  width: 14px; height: 22px;
+  background: radial-gradient(ellipse at 50% 80%, #ffe870 0%, #f6c026 50%, #e8a000 100%);
+  border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+  top: 50%; left: 50%;
+  transform-origin: 50% 100%;
+}
+
+.deco-bloom.large .dp { width: 18px; height: 28px; }
+
+.dp1  { transform: translateX(-50%) translateY(-100%) rotate(0deg)   translateY(-5px); }
+.dp2  { transform: translateX(-50%) translateY(-100%) rotate(60deg)  translateY(-5px); }
+.dp3  { transform: translateX(-50%) translateY(-100%) rotate(120deg) translateY(-5px); }
+.dp4  { transform: translateX(-50%) translateY(-100%) rotate(180deg) translateY(-5px); }
+.dp5  { transform: translateX(-50%) translateY(-100%) rotate(240deg) translateY(-5px); }
+.dp6  { transform: translateX(-50%) translateY(-100%) rotate(300deg) translateY(-5px); }
+.dp7  { transform: translateX(-50%) translateY(-100%) rotate(45deg)  translateY(-5px); }
+.dp8  { transform: translateX(-50%) translateY(-100%) rotate(135deg) translateY(-5px); }
+
+.dp-center {
+  position: absolute;
+  width: 13px; height: 13px;
+  background: radial-gradient(circle, #5c2e00, #3a1800);
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.deco-bloom.large .dp-center { width: 17px; height: 17px; }
+
+@keyframes sway1 {
+  0%   { transform: rotate(-6deg) scaleY(1); }
+  25%  { transform: rotate(7deg)  scaleY(1.02); }
+  55%  { transform: rotate(-4deg) scaleY(1); }
+  80%  { transform: rotate(6deg)  scaleY(1.015); }
+  100% { transform: rotate(-6deg) scaleY(1); }
+}
+
+/* Wind petals deco */
+.wind-petals-deco {
+  margin-top: auto;
+  display: flex; gap: .8rem;
+  align-items: flex-end;
+  padding-left: .5rem;
+}
+
+.wp {
+  display: inline-block;
+  font-size: 1.3rem;
+  color: #f6c026;
+  animation: floatPetal var(--f, 3s) ease-in-out infinite var(--fd, 0s);
+  filter: drop-shadow(0 0 4px rgba(246,194,38,.5));
+}
+
+.wp1 { --f: 3.2s; --fd: 0s; }
+.wp2 { --f: 2.6s; --fd: .5s; font-size: 1.1rem; color: #ffe066; }
+.wp3 { --f: 3.8s; --fd: 1s; }
+
+@keyframes floatPetal {
+  0%   { transform: translateY(0) rotate(0deg); }
+  25%  { transform: translateY(-12px) rotate(15deg); }
+  50%  { transform: translateY(-4px) rotate(-8deg); }
+  75%  { transform: translateY(-16px) rotate(10deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+/* Footer */
+.page-footer {
+  position: absolute;
+  bottom: 0; left: 36px; right: 0;
+  height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  border-top: 1px solid rgba(200,160,60,.2);
+}
+
+.page-num {
+  font-family: 'Playfair Display', serif;
+  font-size: .8rem;
+  color: rgba(120,80,20,.5);
+}
+
+/* ============================================
+   POEM PAGE
+   ============================================ */
+.poem-page .face.front {
+  background: linear-gradient(
+    155deg,
+    #fff5fc 0%, #ffe8f5 15%, #fffdf0 35%,
+    #fef9e0 60%, #fffbf0 80%, #fdf5c8 100%
+  ) !important;
+}
+
+.poem-content {
+  text-align: center;
+  justify-content: center;
+  padding: .6rem 1.2rem;
+}
+
+.poem-icon {
+  position: relative;
+  display: inline-block;
+  font-size: 1.4rem;
+  color: #f6c026;
+  text-shadow: 0 0 12px rgba(246,194,38,.7);
+  animation: heartbeat 2.5s ease-in-out infinite;
+  z-index: 1;
+}
+
+.poem-icon::before,
+.poem-icon::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(246,194,38,.55);
+  animation: sparkleRing 2.5s ease-out infinite;
+  pointer-events: none;
+}
+.poem-icon::after { animation-delay: 1.25s; }
+
+@keyframes sparkleRing {
+  0%   { transform: scale(.7);  opacity: .85; }
+  100% { transform: scale(2.8); opacity: 0; }
+}
+
+@keyframes heartbeat {
+  0%,100% { transform: scale(1);    filter: drop-shadow(0 0 4px rgba(255,200,0,.35)); }
+  15%     { transform: scale(1.35); filter: drop-shadow(0 0 20px rgba(255,230,0,.9)); }
+  30%     { transform: scale(.9);  filter: drop-shadow(0 0 6px rgba(255,200,0,.5)); }
+  50%     { transform: scale(1.18); filter: drop-shadow(0 0 14px rgba(255,210,0,.75)); }
+  65%     { transform: scale(1);    filter: drop-shadow(0 0 4px rgba(255,200,0,.35)); }
+}
+
+.poem-title {
+  border: none !important;
+  margin-bottom: .2rem !important;
+}
+
+.poem-divider {
+  width: 55%;
+  height: 1px;
+  margin: .4rem auto;
+  background: linear-gradient(90deg, transparent, rgba(200,150,40,.5), transparent);
+}
+
+.poem-text {
+  font-size: clamp(.78rem, 2vw, .9rem);
+  font-family: 'Dancing Script', cursive;
+  color: #4a2800;
+  line-height: 1.9;
+  font-style: italic;
+  margin-bottom: .4rem;
+}
+
+/* ============================================
+   BACK COVER
+   ============================================ */
+.back-cover {
+  background: linear-gradient(
+    155deg,
+    #ffeef8 0%, #ffd6eb 12%, #ffb8d4 22%,
+    #ffdfa0 38%, #fde68a 52%,
+    #f6c026 68%, #e8a510 82%, #c87800 100%
+  ) !important;
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem 1rem 48px;
+}
+
+.back-garden {
+  position: relative;
+  height: 40%;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+/* Mini flowers in back cover */
+.bg-flower {
+  position: absolute;
+  bottom: 22px;
+  display: flex;
+  flex-direction: column-reverse;   /* bloom arriba, tallo abajo */
+  align-items: center;
+  transform-origin: bottom center;
+}
+
+.bgf1 { left: 12%; animation: sway1 4s ease-in-out infinite; }
+.bgf2 { left: 50%; transform: translateX(-50%); animation: sway2 5s ease-in-out infinite .3s; }
+.bgf3 { left: 80%; animation: sway1 3.5s ease-in-out infinite .7s; }
+
+@keyframes sway2 {
+  0%   { transform: translateX(-50%) rotate(-5deg) scaleY(1); }
+  25%  { transform: translateX(-50%) rotate(7deg)  scaleY(1.025); }
+  55%  { transform: translateX(-50%) rotate(-3deg) scaleY(1); }
+  80%  { transform: translateX(-50%) rotate(5deg)  scaleY(1.015); }
+  100% { transform: translateX(-50%) rotate(-5deg) scaleY(1); }
+}
+
+.bs {
+  width: 4px; height: 48px;
+  background: linear-gradient(#4caf50, #2e7d32);
+  border-radius: 2px;
+}
+
+.bg-flower.big .bs { width: 5px; height: 65px; }
+
+.bb {
+  position: relative;
+  width: 40px; height: 40px;
+  margin-bottom: -3px;
+}
+
+.bg-flower.big .bb { width: 58px; height: 58px; }
+
+.bp {
+  position: absolute;
+  width: 14px; height: 22px;
+  background: radial-gradient(ellipse at 50% 80%, #ffe870, #f6c026 50%, #e8a000 100%);
+  border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+  top: 50%; left: 50%;
+  transform-origin: 50% 100%;
+}
+
+.bg-flower.big .bp { width: 19px; height: 30px; }
+
+/* Using dp transforms reused */
+.bp1  { transform: translateX(-50%) translateY(-100%) rotate(0deg)   translateY(-5px); }
+.bp2  { transform: translateX(-50%) translateY(-100%) rotate(45deg)  translateY(-5px); }
+.bp3  { transform: translateX(-50%) translateY(-100%) rotate(90deg)  translateY(-5px); }
+.bp4  { transform: translateX(-50%) translateY(-100%) rotate(135deg) translateY(-5px); }
+.bp5  { transform: translateX(-50%) translateY(-100%) rotate(180deg) translateY(-5px); }
+.bp6  { transform: translateX(-50%) translateY(-100%) rotate(225deg) translateY(-5px); }
+.bp7  { transform: translateX(-50%) translateY(-100%) rotate(270deg) translateY(-5px); }
+.bp8  { transform: translateX(-50%) translateY(-100%) rotate(315deg) translateY(-5px); }
+.bp9  { transform: translateX(-50%) translateY(-100%) rotate(30deg)  translateY(-5px); }
+.bp10 { transform: translateX(-50%) translateY(-100%) rotate(60deg)  translateY(-5px); }
+.bp11 { transform: translateX(-50%) translateY(-100%) rotate(120deg) translateY(-5px); }
+.bp12 { transform: translateX(-50%) translateY(-100%) rotate(150deg) translateY(-5px); }
+
+.bc {
+  position: absolute;
+  width: 13px; height: 13px;
+  background: radial-gradient(circle, #5c2e00, #3a1800);
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.bg-flower.big .bc { width: 18px; height: 18px; }
+
+.bg-grass {
+  position: absolute;
+  bottom: 0; left: -10%; width: 120%; height: 28px;
+  background: linear-gradient(180deg, #3a8a22, #1a5010);
+  border-radius: 50% 50% 0 0 / 60% 60% 0 0;
+}
+
+/* Back message */
+.back-message {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: .2rem .4rem;
+  gap: .4rem;
+}
+
+.back-icon {
+  font-size: 2rem;
+  animation: heartbeat 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(200,100,0,.5));
+}
+
+.back-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(1rem, 3.5vw, 1.5rem);
+  color: #3a1800;
+  text-shadow: 0 2px 6px rgba(200,100,0,.25);
+}
+
+.back-text {
+  font-size: clamp(.74rem, 2vw, .88rem);
+  color: rgba(58,24,0,.75);
+  line-height: 1.7;
+  font-family: 'Dancing Script', cursive;
+}
+
+.final-words {
+  font-size: clamp(.85rem, 2.5vw, 1.05rem);
+  color: #7a3000;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(200,100,0,.3);
+}
+
+.btn-restart {
+  margin-top: .4rem;
+  padding: .4rem 1.4rem;
+  background: linear-gradient(135deg, #8b1a6e, #cc3385, #e8507a);
+  color: #fff8ff;
+  border: none; border-radius: 50px;
+  font-family: 'Dancing Script', cursive;
+  font-size: .95rem; font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 3px 18px rgba(180,50,120,.4);
+  transition: transform .2s, box-shadow .2s;
+  text-shadow: 0 1px 4px rgba(0,0,0,.2);
+}
+
+.btn-restart:hover { transform: scale(1.07); box-shadow: 0 6px 26px rgba(200,50,130,.55); }
+
+/* ============================================
+   NAVIGATION CONTROLS
+   ============================================ */
+
+/* Barra inferior: dots + controles juntos en un bloque */
+.bottom-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .35rem;
+  padding-bottom: max(.9rem, env(safe-area-inset-bottom, .9rem));
+  padding-top: .4rem;
+  background: linear-gradient(0deg, rgba(80,10,60,.28) 0%, transparent 100%);
+  backdrop-filter: blur(6px);
+}
+
+.controls {
+  display: flex; align-items: center; gap: .9rem;
+}
+
+.ctrl-btn {
+  padding: .4rem 1.2rem;
+  background: rgba(255,200,230,.14);
+  color: rgba(255, 230, 240, .95);
+  border: 1px solid rgba(255,180,220,.4);
+  border-radius: 50px;
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(.85rem, 3.5vw, 1rem);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all .2s;
+  box-shadow: 0 2px 14px rgba(200,50,150,.2);
+  white-space: nowrap;
+}
+
+.ctrl-btn:hover:not(:disabled) {
+  background: rgba(255,160,210,.28);
+  box-shadow: 0 4px 22px rgba(255,100,200,.4);
+  transform: scale(1.06);
+}
+
+.ctrl-btn:disabled {
+  opacity: .3; cursor: default;
+}
+
+.ctrl-btn.primary {
+  background: linear-gradient(135deg, rgba(255,150,200,.3), rgba(255,180,80,.25));
+  border-color: rgba(255,160,210,.6);
+  box-shadow: 0 2px 16px rgba(255,100,180,.3);
+}
+
+.page-indicator {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(.78rem, 3vw, .9rem);
+  color: transparent;
+  background: linear-gradient(90deg, #ffd6e7, #ffe87a, #ffc2e2);
+  background-size: 200% auto;
+  -webkit-background-clip: text; background-clip: text;
+  animation: titleRainbow 4s linear infinite;
+  min-width: 80px;
+  text-align: center;
+  filter: drop-shadow(0 0 8px rgba(255,180,200,.45));
+}
+
+/* Progress dots */
+.progress-dots {
+  display: flex; gap: .45rem;
+}
+
+.dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: rgba(255,200,220,.28);
+  border: 1.5px solid rgba(255,180,210,.5);
+  transition: all .4s ease;
+  cursor: pointer;
+}
+
+.dot.active {
+  background: linear-gradient(135deg, #ff80c0, #ffb830);
+  border-color: #ffaadd;
+  transform: scale(1.45);
+  box-shadow: 0 0 10px rgba(255,100,200,.7), 0 0 20px rgba(255,180,100,.4);
+}
+
+/* ============================================
+   RESPONSIVE MOBILE
+   ============================================ */
+
+/* Pantallas pequeñas (≤ 390px ancho) */
+@media (max-width: 390px) {
+  .spiral-row { width: 30px; }
+  .ring { width: 18px; height: 18px; }
+  .ring::after { display: none; }
+  .page-header { height: 60px; }
+  .page-lines  { inset: 60px 40px 40px 40px; }
+  .page-content { top: 60px; bottom: 36px; left: 42px; right: 10px; padding: .5rem .4rem; gap: .4rem; }
+  .page-footer { left: 30px; height: 36px; }
+  .page-title { font-size: .95rem; }
+  .page-text  { font-size: .74rem; line-height: 1.85; }
+  .poem-text  { font-size: .74rem; }
+  .cover-title { font-size: 1.4rem; }
+  .cover-sunflower { font-size: 4.5rem; margin: .1rem 0 .1rem; }
+}
+
+/* Altura de pantalla baja (landscape o teléfonos cortos ≤ 700px) */
+@media (max-height: 700px) {
+  .book-scene { top: calc(50% - 2rem); }
+  .page-lines { inset: 68px 42px 42px 42px; }
+  .page-content { top: 68px; gap: .35rem; }
+  .page-text { line-height: 1.75; font-size: .76rem; }
+  .page-title { font-size: .98rem; }
+  .poem-text { font-size: .76rem; line-height: 1.75; }
+  .back-garden { height: 32%; }
+  .bg-flower .bs { height: 38px; }
+  .bg-flower.big .bs { height: 50px; }
+  .ring { width: 18px; height: 18px; }
+}
+
+/* Landscape móvil */
+@media (max-height: 500px) {
+  .sky-title { display: none; }
+  body::before { width: 30px; height: 30px; }
+  .book-scene { top: 50%; }
+  .page-header { height: 50px; }
+  .page-lines  { inset: 50px 38px 36px 38px; }
+  .page-content { top: 50px; bottom: 32px; padding: .3rem; }
+  .page-title { font-size: .88rem; margin-bottom: .1rem; }
+  .page-text  { font-size: .7rem; line-height: 1.65; }
+  .ring { width: 15px; height: 15px; }
+  .spiral-row { width: 26px; }
+}
+
+/* ============================================
+   PAGE TURN SHADOW EFFECT
+   ============================================ */
+.page::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 40px; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,.08));
+  pointer-events: none;
+  border-radius: 0 12px 12px 0;
+}
+
+
+/* ============================================
+   INTERACTIVE 21 DE MARZO ELEMENTS
+   ============================================ */
+
+/* --- Badge 21 de Marzo (Portada) --- */
+.badge-21 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .18rem;
+  margin-top: .5rem;
+  cursor: pointer;
+  user-select: none;
+  animation: badge-pulse 2.8s ease-in-out infinite;
+}
+.b21-ring {
+  position: relative;
+  width: 50px; height: 50px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff4a0, #f5a400 80%);
+  border: 2.5px solid #c97e00;
+  box-shadow: 0 0 10px rgba(255,200,0,.55), 0 0 22px rgba(255,190,0,.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.b21-ring::before,
+.b21-ring::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid rgba(246,194,38,.55);
+  animation: ringRadiate 2.6s ease-out infinite;
+  pointer-events: none;
+}
+.b21-ring::after { animation-delay: 1.3s; }
+
+@keyframes ringRadiate {
+  0%   { transform: scale(.85); opacity: .8; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+.b21-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #5c3200;
+  line-height: 1;
+}
+.b21-mar {
+  font-size: .42rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+  color: #5c3200;
+}
+.b21-sub {
+  font-family: 'Dancing Script', cursive;
+  font-size: .62rem;
+  color: #b86800;
+  text-align: center;
+  line-height: 1.3;
+}
+@keyframes badge-pulse {
+  0%, 55%, 100% { transform: scale(1);    filter: brightness(1); }
+  28%           { transform: scale(1.12); filter: brightness(1.3) drop-shadow(0 0 10px rgba(255,200,0,.7)); }
+}
+
+/* --- Interactive bloom flower (Capítulo I) --- */
+.interact-bloom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .35rem;
+  cursor: pointer;
+  user-select: none;
+  margin-top: .2rem;
+}
+.bloom-bud {
+  position: relative;
+  width: 52px; height: 52px;
+}
+.bl-petal {
+  position: absolute;
+  width: 15px; height: 24px;
+  background: radial-gradient(ellipse at 50% 30%, #fff9c0, #f5a400 80%);
+  border-radius: 50% 50% 40% 40%;
+  top: calc(50% - 24px);
+  left: calc(50% - 7.5px);
+  transform-origin: center bottom;
+  transform: rotate(var(--rot)) scale(0);
+  transition: transform .5s cubic-bezier(.34,1.56,.64,1);
+  box-shadow: inset 0 2px 4px rgba(255,240,100,.45);
+}
+.bl-petal.blp1 { --rot: 0deg; }
+.bl-petal.blp2 { --rot: 60deg; }
+.bl-petal.blp3 { --rot: 120deg; }
+.bl-petal.blp4 { --rot: 180deg; }
+.bl-petal.blp5 { --rot: 240deg; }
+.bl-petal.blp6 { --rot: 300deg; }
+.interact-bloom.bloomed .bl-petal.blp1 { transform: rotate(var(--rot)) scale(1); transition-delay: .00s; }
+.interact-bloom.bloomed .bl-petal.blp2 { transform: rotate(var(--rot)) scale(1); transition-delay: .07s; }
+.interact-bloom.bloomed .bl-petal.blp3 { transform: rotate(var(--rot)) scale(1); transition-delay: .14s; }
+.interact-bloom.bloomed .bl-petal.blp4 { transform: rotate(var(--rot)) scale(1); transition-delay: .21s; }
+.interact-bloom.bloomed .bl-petal.blp5 { transform: rotate(var(--rot)) scale(1); transition-delay: .28s; }
+.interact-bloom.bloomed .bl-petal.blp6 { transform: rotate(var(--rot)) scale(1); transition-delay: .35s; }
+.bl-center {
+  position: absolute;
+  width: 17px; height: 17px;
+  background: radial-gradient(circle at 40% 38%, #c47a00, #6b3a00);
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform .35s .2s cubic-bezier(.34,1.56,.64,1);
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+}
+.interact-bloom.bloomed .bl-center { transform: translate(-50%, -50%) scale(1); }
+
+/* Shared hint text */
+.interact-hint {
+  font-family: 'Dancing Script', cursive;
+  font-size: .64rem;
+  color: #b07000;
+  opacity: .7;
+  transition: opacity .4s;
+  user-select: none;
+  pointer-events: none;
+  line-height: 1;
+}
+.interact-bloom.bloomed   .interact-hint,
+.interact-sun.burst       .interact-hint,
+.interact-wind.blown      .interact-hint { opacity: 0; }
+
+/* --- Interactive Sun (Capítulo II) --- */
+.interact-sun {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .3rem;
+  cursor: pointer;
+  user-select: none;
+  float: right;
+  margin-top: .2rem;
+}
+.sun-wrap {
+  position: relative;
+  width: 54px; height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.interact-sun:not(.burst) .sun-wrap {
+  animation: sun-idle-glow 2.8s ease-in-out infinite;
+}
+@keyframes sun-idle-glow {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(255,200,0,.35)); }
+  50%       { filter: drop-shadow(0 0 14px rgba(255,210,0,.75)); }
+}
+.interact-sun.burst .sun-wrap {
+  animation: sun-spin-burst .65s ease-out forwards;
+}
+@keyframes sun-spin-burst {
+  0%   { transform: rotate(0deg)   scale(1);    filter: drop-shadow(0 0 4px rgba(255,200,0,.4)); }
+  45%  { transform: rotate(180deg) scale(1.38); filter: drop-shadow(0 0 22px rgba(255,230,0,.9)); }
+  100% { transform: rotate(360deg) scale(1);    filter: drop-shadow(0 0 6px rgba(255,200,0,.45)); }
+}
+.sun-core {
+  position: absolute;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 35%, #ffe87a, #f5a400);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  z-index: 2;
+  box-shadow: 0 0 8px rgba(255,200,0,.65);
+}
+.sun-ray {
+  position: absolute;
+  width: 4px; height: 12px;
+  background: linear-gradient(to top, rgba(255,190,0,0), #ffe87a);
+  border-radius: 2px;
+  bottom: 50%;
+  left: calc(50% - 2px);
+  transform-origin: 2px bottom;
+  transition: height .3s;
+}
+.sun-ray.sr1 { transform: rotate(0deg);   animation: rayPulse 1.9s ease-in-out infinite 0s; }
+.sun-ray.sr2 { transform: rotate(45deg);  animation: rayPulse 1.9s ease-in-out infinite .24s; }
+.sun-ray.sr3 { transform: rotate(90deg);  animation: rayPulse 1.9s ease-in-out infinite .47s; }
+.sun-ray.sr4 { transform: rotate(135deg); animation: rayPulse 1.9s ease-in-out infinite .71s; }
+.sun-ray.sr5 { transform: rotate(180deg); animation: rayPulse 1.9s ease-in-out infinite .95s; }
+.sun-ray.sr6 { transform: rotate(225deg); animation: rayPulse 1.9s ease-in-out infinite 1.19s; }
+.sun-ray.sr7 { transform: rotate(270deg); animation: rayPulse 1.9s ease-in-out infinite 1.43s; }
+.sun-ray.sr8 { transform: rotate(315deg); animation: rayPulse 1.9s ease-in-out infinite 1.67s; }
+
+@keyframes rayPulse {
+  0%,100% { height: 11px; opacity: .55; }
+  50%     { height: 20px; opacity: 1; filter: drop-shadow(0 0 4px rgba(255,230,100,.7)); }
+}
+
+/* --- Interactive Wind Zone (Capítulo III) --- */
+.interact-wind {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .25rem;
+  cursor: pointer;
+  user-select: none;
+  margin-top: .15rem;
+}
+.wind-flowers {
+  display: flex;
+  gap: .5rem;
+}
+.ws {
+  font-size: 1.15rem;
+  color: #f0a800;
+  display: inline-block;
+  animation: ws-sway 2.6s ease-in-out infinite;
+}
+.ws.ws1 { animation-delay: .0s; }
+.ws.ws2 { animation-delay: .35s; }
+.ws.ws3 { animation-delay: .7s; }
+.ws.ws4 { animation-delay: 1.05s; }
+.ws.ws5 { animation-delay: 1.4s; }
+@keyframes ws-sway {
+  0%   { transform: translateY(0)     rotate(-12deg) scale(1);    filter: drop-shadow(0 0 2px rgba(255,200,0,.3)); }
+  25%  { transform: translateY(-12px)  rotate(16deg)  scale(1.2);  filter: drop-shadow(0 0 10px rgba(255,220,0,.8)); }
+  50%  { transform: translateY(-4px)   rotate(-8deg)  scale(1.05); filter: drop-shadow(0 0 5px rgba(255,200,0,.5)); }
+  75%  { transform: translateY(-14px)  rotate(13deg)  scale(1.15); filter: drop-shadow(0 0 8px rgba(255,210,0,.7)); }
+  100% { transform: translateY(0)     rotate(-12deg) scale(1);    filter: drop-shadow(0 0 2px rgba(255,200,0,.3)); }
+}
+.interact-wind.blown .ws {
+  animation: ws-fly .55s ease-in forwards !important;
+}
+.interact-wind.blown .ws.ws1 { animation-delay: .00s !important; }
+.interact-wind.blown .ws.ws2 { animation-delay: .05s !important; }
+.interact-wind.blown .ws.ws3 { animation-delay: .10s !important; }
+.interact-wind.blown .ws.ws4 { animation-delay: .15s !important; }
+.interact-wind.blown .ws.ws5 { animation-delay: .20s !important; }
+@keyframes ws-fly {
+  0%   { transform: translateX(0)    scale(1);   opacity: 1; }
+  100% { transform: translateX(90px) scale(.25); opacity: 0; }
+}
+
+/* --- Poem tap zone (floats hearts via JS) --- */
+.poem-tap-zone {
+  cursor: pointer;
+  position: relative;
+  width: 100%;
+}
+.poem-tap-zone::after {
+  content: '💛 Toca el poema';
+  position: absolute;
+  bottom: -.9rem; right: 0;
+  font-family: 'Dancing Script', cursive;
+  font-size: .58rem;
+  color: #c9960a;
+  opacity: .5;
+  pointer-events: none;
+}
+
+/* Floating hearts spawned by JS */
+.float-heart {
+  position: fixed;
+  pointer-events: none;
+  font-size: 1.15rem;
+  animation: heart-rise 1.5s ease-out forwards;
+  z-index: 9999;
+  will-change: transform, opacity;
+}
+@keyframes heart-rise {
+  0%   { transform: translateY(0)     scale(1);   opacity: 1; }
+  70%  { opacity: 1; }
+  100% { transform: translateY(-85px) scale(.35); opacity: 0; }
+}
+
+/* --- Countdown to March 21 (Contraportada) --- */
+.countdown-21 {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  background: linear-gradient(135deg, rgba(255,230,0,.13), rgba(255,155,0,.13));
+  border: 1.5px solid rgba(255,200,0,.38);
+  border-radius: 18px;
+  padding: .38rem .75rem;
+  margin-bottom: .55rem;
+  animation: cd-glow 2.4s ease-in-out infinite;
+}
+@keyframes cd-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(255,200,0,.18); }
+  50%       { box-shadow: 0 0 14px rgba(255,200,0,.48); }
+}
+.cd-icon { font-size: 1.05rem; }
+.cd-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: .72rem;
+  color: #7a3800;
+  line-height: 1.35;
+  flex: 1;
+}
+
+/* ============================================
+   AURORA BACKGROUND
+   ============================================ */
+.aurora-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.ab {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(55px);
+  opacity: 0;
+  animation: auroraFloat var(--aur-d, 18s) ease-in-out infinite var(--aur-dl, 0s);
+  mix-blend-mode: screen;
+}
+.ab1 { width: 340px; height: 260px; background: radial-gradient(ellipse, rgba(255,100,180,.28), transparent 70%); left: -8%; top: 15%;  --aur-d: 20s; --aur-dl: 0s; }
+.ab2 { width: 280px; height: 310px; background: radial-gradient(ellipse, rgba(180,80,255,.22), transparent 70%); right: -6%; top: 30%; --aur-d: 26s; --aur-dl: 6s; }
+.ab3 { width: 380px; height: 200px; background: radial-gradient(ellipse, rgba(255,200,80,.2),  transparent 70%); left: 20%;  bottom: 5%;--aur-d: 22s; --aur-dl: 12s;}
+.ab4 { width: 240px; height: 290px; background: radial-gradient(ellipse, rgba(100,200,255,.16),transparent 70%); right: 12%; bottom:15%;--aur-d: 30s; --aur-dl: 4s; }
+
+@keyframes auroraFloat {
+  0%   { transform: translate(0, 0)      scale(1);    opacity: .65; }
+  22%  { transform: translate(28px,-18px) scale(1.1);  opacity: .85; }
+  45%  { transform: translate(-18px,12px) scale(.95);  opacity: .55; }
+  68%  { transform: translate(15px, 20px) scale(1.08); opacity: .75; }
+  100% { transform: translate(0, 0)      scale(1);    opacity: .65; }
+}
+
+/* ============================================
+   COVER FLOATING HEARTS
+   ============================================ */
+.cover-hearts {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+.chrt {
+  position: absolute;
+  opacity: 0;
+  font-size: var(--cs, 1rem);
+  color: var(--cc, #ff80a0);
+  filter: drop-shadow(0 0 6px rgba(255,100,160,.55));
+  animation: heartRise var(--ch-d, 9s) ease-in-out infinite var(--ch-dl, 0s);
+  user-select: none;
+}
+.cr1 { left: 12%; bottom: 18%; --ch-d: 9s;  --ch-dl: 0s;   --cs: .8rem;  --cc: #ff80c0; }
+.cr2 { left: 25%; bottom: 22%; --ch-d: 12s; --ch-dl: 1.5s; --cs: 1.1rem; --cc: #f6c026; }
+.cr3 { left: 42%; bottom: 14%; --ch-d: 8s;  --ch-dl: 3s;   --cs: .7rem;  --cc: #ff6699; }
+.cr4 { left: 60%; bottom: 20%; --ch-d: 11s; --ch-dl: 5s;   --cs: .9rem;  --cc: #ff80c0; }
+.cr5 { left: 73%; bottom: 16%; --ch-d: 13s; --ch-dl: 2s;   --cs: 1.0rem; --cc: #f6c026; }
+.cr6 { left: 82%; bottom: 25%; --ch-d: 10s; --ch-dl: 7s;   --cs: .75rem; --cc: #ff99cc; }
+.cr7 { left: 18%; bottom: 32%; --ch-d: 14s; --ch-dl: 4s;   --cs: .65rem; --cc: #ffb3d9; }
+.cr8 { left: 50%; bottom: 28%; --ch-d: 16s; --ch-dl: 9s;   --cs: .9rem;  --cc: #f6c026; }
+
+@keyframes heartRise {
+  0%   { transform: translateY(0)      scale(.7) rotate(-10deg); opacity: 0; }
+  10%  { opacity: .85; }
+  40%  { transform: translateY(-55px)  scale(1.1) rotate(12deg); opacity: .7; }
+  70%  { transform: translateY(-110px) scale(.85) rotate(-8deg); opacity: .38; }
+  100% { transform: translateY(-175px) scale(.5)  rotate(15deg); opacity: 0; }
+}
+
+/* ============================================
+   RAINBOW SHIMMER ON POEM SIGNATURE
+   ============================================ */
+.poem-signature {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(.8rem, 2vw, .95rem);
+  color: transparent;
+  background: linear-gradient(90deg, #cc6600, #ff99cc, #f6c026, #ff66aa, #cc6600);
+  background-size: 300% auto;
+  -webkit-background-clip: text; background-clip: text;
+  animation: titleRainbow 4s linear infinite;
+  filter: drop-shadow(0 0 10px rgba(255,150,200,.45));
+}
+
+/* ============================================
+   HF COLORED FLOWERS
+   ============================================ */
+.pg-ch1 .hf1::before { color: #ff80c0; text-shadow: 0 0 8px rgba(255,100,180,.6); }
+.pg-ch1 .hf2::before { color: #ff99d6; }
+.pg-ch1 .hf3::before { color: #ffb3e6; }
+.pg-ch2 .hf1::before { color: #f6c026; text-shadow: 0 0 8px rgba(246,192,38,.7); }
+.pg-ch2 .hf2::before { color: #ffe066; }
+.pg-ch2 .hf3::before { color: #ffd000; }
+.pg-ch3 .hf1::before { color: #c080ff; text-shadow: 0 0 8px rgba(180,80,255,.55); }
+.pg-ch3 .hf2::before { color: #d4a0ff; }
+.pg-ch3 .hf3::before { color: #b060ff; }
+
+/* ============================================
+   CHAPTER CHAPTER-LABEL COLORED
+   ============================================ */
+.pg-ch1 .page-chapter { color: rgba(200,80,130,.7); }
+.pg-ch2 .page-chapter { color: rgba(160,100,10,.7); }
+.pg-ch3 .page-chapter { color: rgba(130,70,200,.65); }
+
+/* ============================================
+   PAGE FOOTER COLORS
+   ============================================ */
+.pg-ch1 .page-footer { border-top-color: rgba(255,150,180,.25); }
+.pg-ch2 .page-footer { border-top-color: rgba(200,150,30,.28); }
+.pg-ch3 .page-footer { border-top-color: rgba(160,100,220,.22); }
+
+.pg-ch1 .page-num { color: rgba(200,80,130,.55); }
+.pg-ch2 .page-num { color: rgba(160,100,10,.55); }
+.pg-ch3 .page-num { color: rgba(130,70,200,.55); }
+
+/* ============================================
+   PETAL COLORS UPGRADED (canvas)
+   ============================================ */
+/* The canvas petal colors are in JS - upgraded in petal draw method */
+
+/* ============================================
+   SCROLL TEXT RAINBOW per chapter
+   ============================================ */
+.pg-ch1 .page-text { color: #3a1020; }
+.pg-ch2 .page-text { color: #2a1800; }
+.pg-ch3 .page-text { color: #1e1030; }
+/* ============================================
+   PAGE ENTRANCE ANIMATIONS (just-entered)
+   ============================================ */
+
+@keyframes titleEntrance {
+  from { opacity: 0; transform: translateY(-16px) scale(.93); filter: blur(5px); }
+  to   { opacity: 1; transform: translateY(0)     scale(1);   filter: blur(0); }
+}
+
+@keyframes textSlideIn {
+  from { opacity: 0; transform: translateX(-14px); filter: blur(3px); }
+  to   { opacity: 1; transform: translateX(0);     filter: blur(0); }
+}
+
+@keyframes poemLineIn {
+  from { opacity: 0; transform: translateY(14px) scale(.96); filter: blur(4px); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);   filter: blur(0); }
+}
+
+@keyframes dividerExpand {
+  from { transform: scaleX(0); opacity: 0; }
+  to   { transform: scaleX(1); opacity: 1; }
+}
+
+@keyframes iconSpin {
+  0%   { transform: scale(1)    rotate(0deg);   filter: drop-shadow(0 0 4px rgba(255,200,0,.4)); }
+  35%  { transform: scale(1.42) rotate(22deg);  filter: drop-shadow(0 0 20px rgba(255,230,0,1)); }
+  60%  { transform: scale(1.1)  rotate(-12deg); filter: drop-shadow(0 0 8px rgba(255,200,0,.6)); }
+  80%  { transform: scale(1.22) rotate(10deg);  filter: drop-shadow(0 0 14px rgba(255,220,0,.8)); }
+  100% { transform: scale(1)    rotate(0deg);   filter: drop-shadow(0 0 4px rgba(255,200,0,.4)); }
+}
+
+@keyframes signatureGlow {
+  0%,100% { text-shadow: 0 0 8px rgba(200,120,0,.4); }
+  50%     { text-shadow: 0 0 22px rgba(255,180,0,.9), 0 0 40px rgba(255,150,0,.4); }
+}
+
+@keyframes coverShimmer {
+  0%,100% { left: -60%; opacity: 0; }
+  15%     { opacity: 1; }
+  55%     { left: 130%; opacity: 1; }
+  65%     { opacity: 0; }
+}
+
+@keyframes buddBreath {
+  0%,100% { transform: scale(1)    rotate(0deg); }
+  50%     { transform: scale(1.08) rotate(6deg); }
+}
+
+@keyframes centerSheen {
+  0%,100% { box-shadow: 0 2px 6px rgba(0,0,0,.3); }
+  50%     { box-shadow: 0 0 14px rgba(255,190,0,.9), 0 2px 6px rgba(0,0,0,.3); }
+}
+
+/* Cover & back cover shimmer sweep */
+.cover-page::after,
+.back-cover::after {
+  content: '';
+  position: absolute;
+  top: -20%; left: -60%;
+  width: 55%; height: 140%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.2) 50%, transparent);
+  transform: rotate(18deg);
+  animation: coverShimmer 6s cubic-bezier(.4,0,.6,1) infinite;
+  pointer-events: none;
+  z-index: 6;
+}
+.back-cover::after { animation-delay: 3s; }
+
+/* Page title entrance */
+.page.just-entered .page-title {
+  animation: titleEntrance .72s cubic-bezier(.34,1.56,.64,1) both;
+}
+
+/* Page texts staggered */
+.page.just-entered .page-content > p:nth-child(2) {
+  animation: textSlideIn .6s .13s ease both;
+}
+.page.just-entered .page-content > p:nth-child(3) {
+  animation: textSlideIn .6s .28s ease both;
+}
+
+/* Cover elements */
+.page.just-entered .cover-title {
+  animation: titleEntrance .8s .1s cubic-bezier(.34,1.56,.64,1) both;
+}
+.page.just-entered .cover-sub {
+  animation: poemLineIn .7s .3s ease both;
+}
+.page.just-entered .cover-date {
+  animation: poemLineIn .6s .48s ease both;
+}
+.page.just-entered .badge-21 {
+  animation: poemLineIn .6s .65s ease both, badge-pulse 2.8s 1.3s ease-in-out infinite;
+}
+
+/* Poem page staggered entrance */
+.page.just-entered .poem-icon {
+  animation: iconSpin 1s .05s cubic-bezier(.34,1.56,.64,1) both;
+}
+.page.just-entered .poem-title {
+  animation: titleEntrance .65s .3s cubic-bezier(.34,1.56,.64,1) both;
+}
+.page.just-entered .poem-divider:first-of-type {
+  animation: dividerExpand .7s .45s ease both;
+}
+.page.just-entered .poem-tap-zone > p:nth-child(1) {
+  animation: poemLineIn .55s .55s ease both;
+}
+.page.just-entered .poem-tap-zone > p:nth-child(2) {
+  animation: poemLineIn .55s .72s ease both;
+}
+.page.just-entered .poem-tap-zone > p:nth-child(3) {
+  animation: poemLineIn .55s .89s ease both;
+}
+.page.just-entered .poem-divider:last-of-type {
+  animation: dividerExpand .7s 1.05s ease both;
+}
+.page.just-entered .poem-signature {
+  animation: poemLineIn .55s 1.15s ease both, titleRainbow 4s 1.7s linear infinite;
+}
+
+/* Back cover entrance */
+.page.just-entered .back-title {
+  animation: titleEntrance .75s .1s cubic-bezier(.34,1.56,.64,1) both;
+}
+.page.just-entered .back-icon {
+  animation: iconSpin .9s .05s cubic-bezier(.34,1.56,.64,1) both;
+}
+.page.just-entered .back-text:nth-of-type(1) {
+  animation: textSlideIn .6s .28s ease both;
+}
+.page.just-entered .back-text:nth-of-type(2) {
+  animation: textSlideIn .6s .44s ease both;
+}
+.page.just-entered .countdown-21 {
+  animation: poemLineIn .65s .6s ease both;
+}
+
+/* Bloom flower breath after blooming */
+.interact-bloom.bloomed .bloom-bud {
+  animation: buddBreath 3.2s ease-in-out infinite;
+}
+.interact-bloom.bloomed .bl-center {
+  animation: centerSheen 2.2s ease-in-out infinite;
+}
+
+/* ============================================
+   EXTRA DECORATIVE ANIMATIONS PER CHAPTER
+   ============================================ */
+
+/* ── Common deco container ─────────────────── */
+.ch-deco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+/* ── Page warm glow (corner radial) ──────────── */
+.page-glow {
+  position: absolute;
+  width: 140px; height: 140px;
+  border-radius: 50%;
+  opacity: .45;
+  animation: glowPulse 5s ease-in-out infinite;
+}
+.pg1 { background: radial-gradient(circle, rgba(255,230,100,.55), transparent 70%); bottom: -20px; right: -20px; animation-delay: 0s; }
+.pg2 { background: radial-gradient(circle, rgba(255,200,60,.5),  transparent 70%); bottom: -15px; left: -20px;  animation-delay: 1.5s; }
+.pg3 { background: radial-gradient(circle, rgba(255,180,50,.5),  transparent 70%); top: -20px;    right: -20px; animation-delay: .8s; }
+
+@keyframes glowPulse {
+  0%,100% { transform: scale(1);    opacity: .35; }
+  50%     { transform: scale(1.25); opacity: .65; }
+}
+
+/* ── Cover golden orbs (portada) ─────────────── */
+.cover-orbs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 38%, #fff9c0, rgba(246,192,38,.7) 50%, transparent 75%);
+  animation: orbFloat var(--d, 10s) ease-in-out infinite var(--dl, 0s);
+  opacity: 0;
+  box-shadow: 0 0 6px rgba(255,210,0,.5);
+}
+.o1 { width: 11px; height: 11px; left: 18%; top: 72%; --d: 9s;  --dl: 0s; }
+.o2 { width: 8px;  height: 8px;  left: 35%; top: 78%; --d: 12s; --dl: 1.8s; }
+.o3 { width: 13px; height: 13px; left: 65%; top: 68%; --d: 11s; --dl: 3.2s; }
+.o4 { width: 7px;  height: 7px;  left: 82%; top: 74%; --d: 8.5s;--dl: 5s; }
+.o5 { width: 10px; height: 10px; left: 52%; top: 82%; --d: 14s; --dl: 2.5s; }
+.o6 { width: 6px;  height: 6px;  left: 25%; top: 60%; --d: 10s; --dl: 7s; }
+
+@keyframes orbFloat {
+  0%   { transform: translateY(0)     scale(.7); opacity: 0; }
+  12%  { opacity: .85; }
+  45%  { transform: translateY(-42px) scale(1); opacity: .65; }
+  75%  { opacity: .4; }
+  100% { transform: translateY(-95px) scale(.5); opacity: 0; }
+}
+
+/* ── Butterflies (cap I) ─────────────────────── */
+.butterfly {
+  position: absolute;
+  font-size: 1.05rem;
+  filter: drop-shadow(0 1px 3px rgba(200,150,0,.35));
+  animation: bfFlight var(--b-dur, 14s) ease-in-out infinite var(--b-dl, 0s);
+  opacity: 0;
+}
+.bf1 { --b-dur: 16s; --b-dl: 0s;  bottom: 28%; left: 0; }
+.bf2 { --b-dur: 20s; --b-dl: 7s;  bottom: 44%; left: 0; }
+
+@keyframes bfFlight {
+  0%   { transform: translateX(-25px)  translateY(0)     scaleX(1);   opacity: 0; }
+  6%   { opacity: 1; }
+  18%  { transform: translateX(60px)   translateY(-18px) scaleX(-1); }
+  32%  { transform: translateX(115px)  translateY(-6px)  scaleX(1); }
+  47%  { transform: translateX(180px)  translateY(-26px) scaleX(-1); }
+  62%  { transform: translateX(240px)  translateY(-10px) scaleX(1); }
+  76%  { transform: translateX(305px)  translateY(-20px) scaleX(-1); }
+  91%  { opacity: 1; }
+  100% { transform: translateX(395px)  translateY(-8px)  scaleX(1);   opacity: 0; }
+}
+
+/* ── Pollen sparkle dots (cap I & II) ─────────── */
+.pollen {
+  position: absolute;
+  color: #f6c026;
+  animation: pollenFloat var(--pf, 6s) ease-in-out infinite var(--pfl, 0s);
+  opacity: 0;
+  filter: drop-shadow(0 0 4px rgba(255,220,0,.6));
+}
+.ch1-deco .pl1 { font-size: .65rem; left: 10%; bottom: 12%; --pf: 7s;   --pfl: 0s; }
+.ch1-deco .pl2 { font-size: .8rem;  left: 45%; bottom: 22%; --pf: 9s;   --pfl: 1.5s; }
+.ch1-deco .pl3 { font-size: .55rem; left: 75%; bottom: 8%;  --pf: 6.5s; --pfl: 3s; }
+.ch1-deco .pl4 { font-size: 1rem;   left: 88%; bottom: 30%; --pf: 8s;   --pfl: 4.5s; }
+.ch2-deco .pl1 { font-size: .7rem;  left: 12%; bottom: 18%; --pf: 8s;   --pfl: .5s; }
+.ch2-deco .pl2 { font-size: .6rem;  left: 58%; bottom: 12%; --pf: 10s;  --pfl: 2s; }
+.ch2-deco .pl3 { font-size: .85rem; left: 82%; bottom: 25%; --pf: 7.5s; --pfl: 5s; }
+
+@keyframes pollenFloat {
+  0%   { transform: translateY(0)     scale(.7) rotate(0deg);   opacity: 0; }
+  18%  { opacity: .95; }
+  50%  { transform: translateY(-38px) scale(1.2) rotate(40deg); opacity: .7; }
+  82%  { opacity: .35; }
+  100% { transform: translateY(-75px) scale(.5) rotate(85deg);  opacity: 0; }
+}
+
+/* ── Sun rays background (cap II) ────────────── */
+.sun-rays-bg {
+  position: absolute;
+  width: 130px; height: 130px;
+  top: calc(60% - 65px); right: calc(6% - 65px);
+  background: repeating-conic-gradient(
+    rgba(255,220,80,.16) 0deg 11deg,
+    transparent         11deg 22deg
+  );
+  border-radius: 50%;
+  animation: raysRotate 14s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes raysRotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── Drifting clouds (cap II) ────────────────── */
+.floatcloud {
+  position: absolute;
+  border-radius: 60px;
+  background: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,.42), rgba(255,255,255,0) 75%);
+  animation: cloudDrift var(--cd, 18s) linear infinite var(--cdl, 0s);
+  opacity: 0;
+  pointer-events: none;
+}
+.fc1 { width: 68px; height: 22px; top: 26%; right: -80px; --cd: 22s; --cdl: 0s; }
+.fc2 { width: 45px; height: 16px; top: 43%; right: -55px; --cd: 16s; --cdl: 5s; }
+.fc3 { width: 80px; height: 18px; top: 58%; right: -90px; --cd: 26s; --cdl: 10s;}
+
+@keyframes cloudDrift {
+  0%   { transform: translateX(0);      opacity: 0; }
+  8%   { opacity: .82; }
+  88%  { opacity: .55; }
+  100% { transform: translateX(-440px); opacity: 0; }
+}
+
+/* ── Soaring birds (cap III) ─────────────────── */
+.soar-bird {
+  position: absolute;
+  font-size: .8rem;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.25));
+  animation: birdSoar var(--bd, 13s) ease-in-out infinite var(--bl, 0s);
+  opacity: 0;
+}
+.sb1 { --bd: 15s; --bl: 0s;  top: 18%; right: -28px; }
+.sb2 { --bd: 11s; --bl: 6s;  top: 36%; right: -28px; }
+
+@keyframes birdSoar {
+  0%   { transform: translateX(0)      translateY(0);      opacity: 0; }
+  5%   { opacity: 1; }
+  28%  { transform: translateX(-110px) translateY(-10px); }
+  52%  { transform: translateX(-220px) translateY(-3px); }
+  76%  { transform: translateX(-320px) translateY(-14px); }
+  95%  { opacity: 1; }
+  100% { transform: translateX(-430px) translateY(-6px);  opacity: 0; }
+}
+
+/* ── Wind streaks (cap III) ──────────────────── */
+.wstrk {
+  position: absolute;
+  height: 2px;
+  border-radius: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200,180,100,.4) 40%, rgba(255,220,100,.55) 60%, transparent);
+  animation: windSweep var(--ws, 3s) ease-in-out infinite var(--wsl, 0s);
+  opacity: 0;
+  pointer-events: none;
+}
+.wst1 { width: 65px;  top: 32%; left: -10%; --ws: 2.8s; --wsl: 0s; }
+.wst2 { width: 42px;  top: 50%; left: -10%; --ws: 3.6s; --wsl: .7s; }
+.wst3 { width: 90px;  top: 66%; left: -10%; --ws: 2.3s; --wsl: 1.4s; }
+.wst4 { width: 55px;  top: 78%; left: -10%; --ws: 4s;   --wsl: 2.2s; }
+
+@keyframes windSweep {
+  0%   { transform: translateX(0);    opacity: 0; }
+  12%  { opacity: .75; }
+  88%  { opacity: .5; }
+  100% { transform: translateX(460px); opacity: 0; }
+}
+
+/* ── Poem sparkle stars (poema) ──────────────── */
+.poem-sparkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.pspark {
+  position: absolute;
+  color: #f6c026;
+  animation: pFlicker var(--pf, 5s) ease-in-out infinite var(--pfl, 0s);
+  opacity: 0;
+  filter: drop-shadow(0 0 4px rgba(255,210,0,.55));
+}
+.ps1 { font-size: .58rem; left: 7%;  top: 12%; --pf: 5.5s; --pfl: 0s; }
+.ps2 { font-size: .82rem; right: 8%; top: 28%; --pf: 7.2s; --pfl: 1.0s; }
+.ps3 { font-size: .5rem;  left: 16%; top: 50%; --pf: 4.8s; --pfl: 2.2s; }
+.ps4 { font-size: .72rem; right: 6%; top: 62%; --pf: 6.5s; --pfl: 3.1s; }
+.ps5 { font-size: .92rem; left: 4%;  top: 78%; --pf: 8.5s; --pfl: 1.5s; }
+.ps6 { font-size: .6rem;  right: 4%; top: 86%; --pf: 5s;   --pfl: 4.0s; }
+.ps7 { font-size: .78rem; left: 50%; top: 8%;  --pf: 6s;   --pfl: 2.8s; }
+
+@keyframes pFlicker {
+  0%,100%{ transform: scale(.5)  rotate(0deg);   opacity: 0; }
+  15%    { transform: scale(1.3) rotate(18deg);  opacity: .92; filter: drop-shadow(0 0 10px rgba(255,235,0,1)); }
+  35%    { transform: scale(.85) rotate(-12deg); opacity: .5; }
+  58%    { transform: scale(1.5) rotate(25deg);  opacity: .88; filter: drop-shadow(0 0 14px rgba(255,225,0,1)); }
+  80%    { transform: scale(.65) rotate(8deg);   opacity: .3; }
+}
+
+/* ── Garden butterflies + fireflies (contraportada) ── */
+.garden-bug {
+  position: absolute;
+  font-size: .75rem;
+  pointer-events: none;
+  animation: gardenBug var(--gb, 10s) ease-in-out infinite var(--gbl, 0s);
+  opacity: 0;
+  z-index: 5;
+}
+.gb1 { --gb: 13s; --gbl: 0s;  top: 5%; left: 5%; }
+.gb2 { --gb: 9s;  --gbl: 4s;  top: 8%; left: 55%; }
+
+@keyframes gardenBug {
+  0%   { transform: translateX(-10px) translateY(0)     scaleX(1);   opacity: 0; }
+  8%   { opacity: 1; }
+  25%  { transform: translateX(40px)  translateY(-12px) scaleX(-1); }
+  50%  { transform: translateX(90px)  translateY(-5px)  scaleX(1); }
+  70%  { transform: translateX(140px) translateY(-16px) scaleX(-1); }
+  92%  { opacity: 1; }
+  100% { transform: translateX(200px) translateY(-8px)  scaleX(1);  opacity: 0; }
+}
+
+.garden-firefly {
+  position: absolute;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: #ffe87a;
+  box-shadow: 0 0 6px 2px rgba(255,230,60,.7);
+  pointer-events: none;
+  animation: fireflyFloat var(--ff, 5s) ease-in-out infinite var(--ffl, 0s);
+  opacity: 0;
+}
+.gf1 { --ff: 6s;  --ffl: 0s;   left: 30%; top: 30%; }
+.gf2 { --ff: 8s;  --ffl: 2.2s; left: 60%; top: 20%; }
+.gf3 { --ff: 5.5s;--ffl: 4.5s; left: 15%; top: 12%; }
+
+@keyframes fireflyFloat {
+  0%   { transform: translate(0,0);          opacity: 0;   box-shadow: 0 0 6px 2px rgba(255,230,60,.5); }
+  15%  { opacity: .9; }
+  30%  { transform: translate(14px, -18px);  opacity: .75; box-shadow: 0 0 12px 4px rgba(255,240,100,.9); }
+  55%  { transform: translate(-10px, -30px); opacity: .55; }
+  75%  { transform: translate(20px,  -12px); opacity: .82; box-shadow: 0 0 10px 3px rgba(255,240,100,.85); }
+  100% { transform: translate(0,0);          opacity: 0; }
+}
+
+/* ── Entrance: deco fades in when page just-entered ── */
+.page.just-entered .ch-deco,
+.page.just-entered .cover-sunflower,
+.page.just-entered .poem-sparkles {
+  animation: decoFadeIn .9s .4s ease both;
+}
+@keyframes decoFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Improved header-flowers extra glow ─────── */
+.hf::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,220,60,.35), transparent 65%);
+  animation: hfAura var(--w, 3s) ease-in-out infinite;
+}
+.hf1::after { animation-delay: 0s; }
+.hf2::after { animation-delay: .4s; }
+.hf3::after { animation-delay: .8s; }
+
+@keyframes hfAura {
+  0%,100% { transform: scale(.8); opacity: .3; }
+  50%     { transform: scale(1.5); opacity: .7; }
+}

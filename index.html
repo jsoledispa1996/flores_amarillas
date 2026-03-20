@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi Cuaderno de Flores 🌻</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <canvas id="petalCanvas"></canvas>
+  <div id="stars"></div>  <!-- Aurora animated background blobs -->
+  <div class="aurora-bg" aria-hidden="true">
+    <span class="ab ab1"></span><span class="ab ab2"></span>
+    <span class="ab ab3"></span><span class="ab ab4"></span>
+  </div>  <div class="sky-title">Mi Cuaderno de Flores Amarillas 🌻</div>
+
+  <!-- ====================================================
+       CUADERNO
+  ==================================================== -->
+  <div class="book-scene">
+    <div class="book" id="book">
+
+      <!-- ── PORTADA ──────────────────────────────────── -->
+      <div class="page" id="page-0" data-index="0">
+        <div class="face front cover-page">
+          <div class="spiral-row">
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+          </div>
+          <div class="cover-sunflower" aria-label="Girasol" title="¡Tócame! 🌻">🌻</div>
+          <h1 class="cover-title">Para Ti,<br/><em>Mi Amor</em></h1>
+          <p class="cover-sub">Un jardín de palabras florecido<br/>solo para ti 💛</p>
+          <div class="cover-date">Primavera · 2026</div>
+          <div class="badge-21" id="badge21">
+            <div class="b21-ring">
+              <span class="b21-num">21</span>
+              <span class="b21-mar">MAR</span>
+            </div>
+            <span class="b21-sub">Día de las<br/>Flores Amarillas</span>
+          </div>
+          <!-- Floating hearts on cover -->
+          <div class="cover-hearts" aria-hidden="true">
+            <span class="chrt cr1">♥</span><span class="chrt cr2">💛</span>
+            <span class="chrt cr3">♥</span><span class="chrt cr4">♥</span>
+            <span class="chrt cr5">💛</span><span class="chrt cr6">♥</span>
+            <span class="chrt cr7">♥</span><span class="chrt cr8">💛</span>
+          </div>
+          <div class="page-hint"><span class="hint-arrow">›</span> Pasa la página</div>
+        </div>
+        <div class="face back page-back"><div class="back-pattern"></div></div>
+      </div>
+
+      <!-- ── PÁGINA 1 ──────────────────────────────────── -->
+      <div class="page" id="page-1" data-index="1">
+        <div class="face front pg-ch1">
+          <div class="spiral-row">
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+          </div>
+          <div class="page-header">
+            <div class="header-flowers">
+              <div class="hf hf1"></div><div class="hf hf2"></div><div class="hf hf3"></div>
+            </div>
+            <span class="page-chapter">Capítulo I</span>
+          </div>
+          <div class="page-lines"></div>
+          <div class="page-content">
+            <h2 class="page-title">El día que te conocí</h2>
+            <p class="page-text">
+              El día que te conocí, el mundo entero cambió de color. Todo empezó a
+              verse más brillante, más cálido, como cuando el sol de la mañana toca
+              los campos y hace que las flores amarillas abran sus pétalos con alegría.
+            </p>
+            <p class="page-text">
+              No sabía entonces que ese instante sería el más importante de mi vida.
+              Solo sé que, desde aquel momento, cada día que pasa junto a ti es un
+              regalo que atesoro con todo mi corazón.
+            </p>
+            <div class="interact-bloom" id="bloomFlower">
+              <div class="bloom-bud">
+                <div class="bl-petal blp1"></div><div class="bl-petal blp2"></div>
+                <div class="bl-petal blp3"></div><div class="bl-petal blp4"></div>
+                <div class="bl-petal blp5"></div><div class="bl-petal blp6"></div>
+                <div class="bl-center"></div>
+              </div>
+              <span class="interact-hint">🌸 Toca para que florezca</span>
+            </div>
+            <div class="ch-deco ch1-deco" aria-hidden="true">
+              <span class="butterfly bf1">🦋</span>
+              <span class="butterfly bf2">🦋</span>
+              <span class="pollen pl1">✦</span>
+              <span class="pollen pl2">✧</span>
+              <span class="pollen pl3">✦</span>
+              <span class="pollen pl4">·</span>
+              <div class="page-glow pg1"></div>
+            </div>
+          </div>
+          <div class="page-footer"><span class="page-num">1</span></div>
+        </div>
+        <div class="face back page-back"><div class="back-pattern"></div></div>
+      </div>
+
+      <!-- ── PÁGINA 2 ──────────────────────────────────── -->
+      <div class="page" id="page-2" data-index="2">
+        <div class="face front pg-ch2">
+          <div class="spiral-row">
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+          </div>
+          <div class="page-header">
+            <div class="header-flowers">
+              <div class="hf hf2"></div><div class="hf hf1"></div><div class="hf hf3"></div>
+            </div>
+            <span class="page-chapter">Capítulo II</span>
+          </div>
+          <div class="page-lines"></div>
+          <div class="page-content">
+            <h2 class="page-title">Eres mi sol amarillo</h2>
+            <p class="page-text">
+              Eres como las flores de girasol que siempre buscan la luz: donde tú
+              estás, la alegría florece. Tu sonrisa es el amanecer más hermoso que
+              he visto jamás, y tus ojos guardan más maravillas que todo el jardín
+              de la primavera.
+            </p>
+            <p class="page-text">
+              Eres la razón por la que el cielo pinta sus mejores colores, por la
+              que las mariposas bailan entre las flores, y por la que yo, cada
+              mañana, me levanto con ganas de vivir un nuevo capítulo de esta
+              historia tan bella que construimos juntos.
+            </p>
+            <div class="interact-sun" id="interactiveSun">
+              <div class="sun-wrap">
+                <div class="sun-ray sr1"></div><div class="sun-ray sr2"></div>
+                <div class="sun-ray sr3"></div><div class="sun-ray sr4"></div>
+                <div class="sun-ray sr5"></div><div class="sun-ray sr6"></div>
+                <div class="sun-ray sr7"></div><div class="sun-ray sr8"></div>
+                <div class="sun-core">🌻</div>
+              </div>
+              <span class="interact-hint">☀️ Toca el girasol</span>
+            </div>
+            <div class="ch-deco ch2-deco" aria-hidden="true">
+              <div class="sun-rays-bg"></div>
+              <span class="floatcloud fc1"></span>
+              <span class="floatcloud fc2"></span>
+              <span class="floatcloud fc3"></span>
+              <span class="pollen pl1">✦</span>
+              <span class="pollen pl2">✧</span>
+              <span class="pollen pl3">✦</span>
+              <div class="page-glow pg2"></div>
+            </div>
+          </div>
+          <div class="page-footer"><span class="page-num">2</span></div>
+        </div>
+        <div class="face back page-back"><div class="back-pattern"></div></div>
+      </div>
+
+      <!-- ── PÁGINA 3 ──────────────────────────────────── -->
+      <div class="page" id="page-3" data-index="3">
+        <div class="face front pg-ch3">
+          <div class="spiral-row">
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+          </div>
+          <div class="page-header">
+            <div class="header-flowers">
+              <div class="hf hf3"></div><div class="hf hf2"></div><div class="hf hf1"></div>
+            </div>
+            <span class="page-chapter">Capítulo III</span>
+          </div>
+          <div class="page-lines"></div>
+          <div class="page-content">
+            <h2 class="page-title">Cada amanecer contigo</h2>
+            <p class="page-text">
+              Cada vez que el viento sopla y los pétalos vuelan, pienso en ti. En
+              cómo tu presencia llena cada rincón de mi mundo de calidez y de ese
+              perfume dulce que solo tienen las flores amarillas en pleno verano.
+            </p>
+            <p class="page-text">
+              Con cada amanecer deseo lo mismo: que estés bien, que sonrías, que
+              sepas que hay alguien en este mundo que te admira profundamente y que
+              sería capaz de plantar un jardín entero de girasoles solo para verte
+              feliz.
+            </p>
+            <div class="interact-wind" id="windZone">
+              <div class="wind-flowers">
+                <span class="ws ws1">✿</span>
+                <span class="ws ws2">❋</span>
+                <span class="ws ws3">✿</span>
+                <span class="ws ws4">❋</span>
+                <span class="ws ws5">✿</span>
+              </div>
+              <span class="interact-hint">🌬️ Toca para soplar pétalos</span>
+            </div>
+            <div class="ch-deco ch3-deco" aria-hidden="true">
+              <span class="soar-bird sb1">🐦</span>
+              <span class="soar-bird sb2">🕊️</span>
+              <span class="wstrk wst1"></span>
+              <span class="wstrk wst2"></span>
+              <span class="wstrk wst3"></span>
+              <span class="wstrk wst4"></span>
+              <div class="page-glow pg3"></div>
+            </div>
+          </div>
+          <div class="page-footer"><span class="page-num">3</span></div>
+        </div>
+        <div class="face back page-back"><div class="back-pattern"></div></div>
+      </div>
+
+      <!-- ── PÁGINA 4 · POEMA ──────────────────────────── -->
+      <div class="page" id="page-4" data-index="4">
+        <div class="face front poem-page">
+          <div class="spiral-row">
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+          </div>
+          <div class="corner-flowers corner-tl small">
+            <div class="mini-flower mf1"></div><div class="mini-flower mf2"></div>
+          </div>
+          <div class="corner-flowers corner-br small">
+            <div class="mini-flower mf2"></div><div class="mini-flower mf1"></div>
+          </div>
+          <div class="page-lines"></div>
+          <div class="page-content poem-content">
+            <div class="poem-sparkles" aria-hidden="true">
+              <span class="pspark ps1">✦</span>
+              <span class="pspark ps2">✧</span>
+              <span class="pspark ps3">✦</span>
+              <span class="pspark ps4">✧</span>
+              <span class="pspark ps5">⋆</span>
+              <span class="pspark ps6">✦</span>
+              <span class="pspark ps7">✧</span>
+            </div>
+            <div class="poem-icon">✦</div>
+            <h2 class="page-title poem-title">Un poema para ti</h2>
+            <div class="poem-divider"></div>
+            <div class="poem-tap-zone" id="poemTapZone">
+              <p class="poem-text">
+                Eres la flor más hermosa<br/>
+                que el universo pudo crear,<br/>
+                el sol se viste de amarillo<br/>
+                solo para parecerse a ti.
+              </p>
+              <p class="poem-text">
+                Tienes la ternura del viento<br/>
+                que mueve los campos en flor,<br/>
+                y en cada pétalo que vuela<br/>
+                va escrito mi amor.
+              </p>
+              <p class="poem-text">
+                Si el jardín te preguntara<br/>
+                cuál es su flor preferida,<br/>
+                señalaría tu sonrisa<br/>
+                y diría: "ella es mi vida".
+              </p>
+            </div>
+            <div class="poem-divider"></div>
+            <span class="poem-signature">— Para ti, siempre 💛</span>
+          </div>
+          <div class="page-footer"><span class="page-num">4</span></div>
+        </div>
+        <div class="face back page-back"><div class="back-pattern"></div></div>
+      </div>
+
+      <!-- ── CONTRAPORTADA ─────────────────────────────── -->
+      <div class="page" id="page-5" data-index="5">
+        <div class="face front back-cover">
+          <div class="spiral-row">
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+            <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+          </div>
+          <div class="back-garden">
+            <span class="garden-bug gb1" aria-hidden="true">🦋</span>
+            <span class="garden-bug gb2" aria-hidden="true">🦊</span>
+            <span class="garden-firefly gf1" aria-hidden="true"></span>
+            <span class="garden-firefly gf2" aria-hidden="true"></span>
+            <span class="garden-firefly gf3" aria-hidden="true"></span>
+            <div class="bg-flower bgf1">
+              <div class="bs"></div>
+              <div class="bb">
+                <div class="bp bp1"></div><div class="bp bp2"></div>
+                <div class="bp bp3"></div><div class="bp bp4"></div>
+                <div class="bp bp5"></div><div class="bp bp6"></div>
+                <div class="bp bp7"></div><div class="bp bp8"></div>
+                <div class="bc"></div>
+              </div>
+            </div>
+            <div class="bg-flower bgf2 big">
+              <div class="bs"></div>
+              <div class="bb">
+                <div class="bp bp1"></div><div class="bp bp2"></div>
+                <div class="bp bp3"></div><div class="bp bp4"></div>
+                <div class="bp bp5"></div><div class="bp bp6"></div>
+                <div class="bp bp7"></div><div class="bp bp8"></div>
+                <div class="bp bp9"></div><div class="bp bp10"></div>
+                <div class="bp bp11"></div><div class="bp bp12"></div>
+                <div class="bc"></div>
+              </div>
+            </div>
+            <div class="bg-flower bgf3">
+              <div class="bs"></div>
+              <div class="bb">
+                <div class="bp bp1"></div><div class="bp bp2"></div>
+                <div class="bp bp3"></div><div class="bp bp4"></div>
+                <div class="bp bp5"></div><div class="bp bp6"></div>
+                <div class="bp bp7"></div><div class="bp bp8"></div>
+                <div class="bc"></div>
+              </div>
+            </div>
+            <div class="bg-grass"></div>
+          </div>
+          <div class="back-message">
+            <div class="back-icon">💛</div>
+            <h2 class="back-title">Para siempre tuyo</h2>
+            <p class="back-text">
+              Este cuaderno es solo un pequeño reflejo de todo lo que siento por ti.
+              Las palabras se quedan cortas, pero las flores amarillas, con su belleza
+              simple y sincera, dicen lo que el corazón no puede expresar.
+            </p>
+            <p class="back-text final-words">Te amo, hoy y siempre. 💛</p>
+            <div class="countdown-21" id="countdown21">
+              <span class="cd-icon">🌻</span>
+              <span class="cd-text" id="cdText">Cargando...</span>
+            </div>
+            <button class="btn-restart" id="btnRestart">↩ Volver al inicio</button>
+          </div>
+        </div>
+        <div class="face back page-back"><div class="back-pattern"></div></div>
+      </div>
+
+    </div><!-- /book -->
+  </div><!-- /book-scene -->
+
+  <!-- Controles de navegación -->
+  <div class="bottom-bar">
+    <div class="progress-dots" id="progressDots"></div>
+    <div class="controls">
+      <button class="ctrl-btn" id="btnPrev" disabled>‹ Anterior</button>
+      <div class="page-indicator" id="pageIndicator">
+        <span id="currentPageLabel">Portada</span>
+      </div>
+      <button class="ctrl-btn primary" id="btnNext">Siguiente ›</button>
+    </div>
+  </div>
+
+  <!-- Música de fondo -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="audio/flores_amarillas.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Botón flotante de música -->
+  <button class="music-btn" id="musicBtn" title="Reproducir / Pausar música">
+    <span class="music-icon">🎵</span>
+    <span class="music-bars" aria-hidden="true">
+      <span class="bar b1"></span>
+      <span class="bar b2"></span>
+      <span class="bar b3"></span>
+      <span class="bar b4"></span>
+    </span>
+  </button>
+
+  <script src="js/petals.js"></script>
+  <script>
+    (function () {
+      const audio  = document.getElementById('bgMusic');
+      const btn    = document.getElementById('musicBtn');
+      const icon   = btn.querySelector('.music-icon');
+      const bars   = btn.querySelector('.music-bars');
+      let playing  = false;
+
+      function setPlaying(state) {
+        playing = state;
+        icon.textContent = playing ? '🎵' : '🔇';
+        bars.style.display = playing ? 'flex' : 'none';
+        btn.classList.toggle('is-playing', playing);
+      }
+
+      btn.addEventListener('click', () => {
+        if (playing) {
+          audio.pause();
+          setPlaying(false);
+        } else {
+          audio.play().then(() => setPlaying(true)).catch(() => {});
+        }
+      });
+
+      // Intentar reproducir automáticamente tras la primera interacción con la página
+      document.addEventListener('click', function startOnce() {
+        if (!playing) {
+          audio.play().then(() => setPlaying(true)).catch(() => {});
+        }
+        document.removeEventListener('click', startOnce);
+      }, { once: false });
+    })();
+  </script>
+</body>
+</html>
