@@ -355,55 +355,6 @@
     </div>
   </div>
 
-  <!-- Música de fondo -->
-  <audio id="bgMusic" loop preload="auto">
-    <source src="audio/flores_amarillas.mp3" type="audio/mpeg">
-  </audio>
-
-  <!-- Botón flotante de música -->
-  <button class="music-btn" id="musicBtn" title="Reproducir / Pausar música">
-    <span class="music-icon">🎵</span>
-    <span class="music-bars" aria-hidden="true">
-      <span class="bar b1"></span>
-      <span class="bar b2"></span>
-      <span class="bar b3"></span>
-      <span class="bar b4"></span>
-    </span>
-  </button>
-
   <script src="js/petals.js"></script>
-  <script>
-    (function () {
-      const audio  = document.getElementById('bgMusic');
-      const btn    = document.getElementById('musicBtn');
-      const icon   = btn.querySelector('.music-icon');
-      const bars   = btn.querySelector('.music-bars');
-      let playing  = false;
-
-      function setPlaying(state) {
-        playing = state;
-        icon.textContent = playing ? '🎵' : '🔇';
-        bars.style.display = playing ? 'flex' : 'none';
-        btn.classList.toggle('is-playing', playing);
-      }
-
-      btn.addEventListener('click', () => {
-        if (playing) {
-          audio.pause();
-          setPlaying(false);
-        } else {
-          audio.play().then(() => setPlaying(true)).catch(() => {});
-        }
-      });
-
-      // Intentar reproducir automáticamente tras la primera interacción con la página
-      document.addEventListener('click', function startOnce() {
-        if (!playing) {
-          audio.play().then(() => setPlaying(true)).catch(() => {});
-        }
-        document.removeEventListener('click', startOnce);
-      }, { once: false });
-    })();
-  </script>
 </body>
 </html>
